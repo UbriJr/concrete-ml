@@ -442,12 +442,13 @@ def torch_inference(
     return np.mean(np.vstack(correct), dtype="float64")
 
 
-def fhe_compatibility(model: Callable, data: DataLoader) -> Callable:
+def fhe_compatibility(model: Callable, data: DataLoader, p_error: float) -> Callable:
     """Test if the model is FHE-compatible.
 
     Args:
         model (Callable): The Brevitas model.
         data (DataLoader): The data loader.
+        p_error (float) -- probablity of error
 
     Returns:
         Callable: Quantized model.
@@ -459,6 +460,7 @@ def fhe_compatibility(model: Callable, data: DataLoader) -> Callable:
         torch_inputset=data,
         show_mlir=False,
         output_onnx_file="test.onnx",
+        p_error = p_error, # need to pass this into function
     )
 
     return qmodel
